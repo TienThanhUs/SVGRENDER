@@ -1,132 +1,47 @@
 # SVGRENDER
 
-<div align="center">
+Một chương trình mạnh mẽ được viết bằng C++ cho phép đọc (parse) và kết xuất (render) hiển thị các file đồ họa vector dạng SVG (Scalable Vector Graphics).
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Stars](https://img.shields.io/github/stars/TienThanhUs/SVGRENDER?style=social)](https://github.com/TienThanhUs/SVGRENDER/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/TienThanhUs/SVGRENDER)](https://github.com/TienThanhUs/SVGRENDER/issues)
+## 1. Code làm gì?
+Chương trình này hoạt động như một SVG Viewer nội bộ. Nó phân tích cú pháp (parse) nội dung của một file `.svg` (sử dụng thư viện `rapidxml`) và sau đó hiển thị (render) các khối hình học, đường nét và màu sắc có trong file SVG đó ra một cửa sổ ứng dụng trên máy tính thông qua thư viện đồ họa **SFML**. Ngoài ra, chương trình cho phép người dùng tương tác trực tiếp bằng bàn phím để phóng to, thu nhỏ và xoay bản vẽ một cách linh hoạt.
 
-A lightweight, high-performance SVG rendering library designed for flexibility and ease of integration.
+## 2. Input và Output là gì?
+- **Input:** Đường dẫn tới một file định dạng vector `.svg` (Ví dụ: `svg-01.svg` hoặc ổ đĩa chứa file gốc).
+- **Output:** Một cửa sổ đồ họa hiển thị kết quả trực quan của file SVG cấu thành từ các hình khối (shapes), đường đi (paths), chữ (texts)... và màu sắc tương ứng nằm trong file cung cấp, cùng với khả năng chịu tương tác.
 
-</div>
+## 3. Cách sử dụng
 
----
+### 3.1. Yêu cầu hệ thống (Prerequisites)
+- Trình biên dịch C++ hỗ trợ **C++20** (như `g++`).
+- Đã cài đặt thư viện đồ họa **SFML 3.0.2** (Trong file Makefile hiện đang được cấu hình đường dẫn cho macOS qua Homebrew).
+- Lệnh biên dịch `make`.
 
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Usage](#usage)
-- [API Reference](#api-reference)
-- [Contributing](#contributing)
-- [License](#license)
-- [Author](#author)
-
----
-
-## Overview
-
-**SVGRENDER** is a powerful SVG rendering engine that lets you parse, manipulate, and render Scalable Vector Graphics (SVG) files with ease. Whether you are building a design tool, a data visualization platform, or a web application that needs dynamic graphics, SVGRENDER provides the building blocks you need.
-
----
-
-## ✨ Features
-
-- 🖼️ **Full SVG Parsing** — Supports a wide range of SVG elements and attributes
-- ⚡ **High Performance** — Optimised rendering pipeline for smooth output
-- 🔧 **Extensible** — Plugin-friendly architecture for custom elements and renderers
-- 📐 **Accurate Layout** — Precise geometry calculations respecting SVG coordinate systems
-- 🌐 **Cross-platform** — Runs on major operating systems and environments
-- 📦 **Zero dependencies** — Minimal footprint with no external runtime dependencies
-
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-Before you begin, make sure you have the following installed:
-
-- **Node.js** v16 or higher *(if using the JavaScript build)*
-- **Git** for cloning the repository
-
-### Installation
-
-#### Clone the repository
-
+### 3.2. Biên dịch (Build)
+Di chuyển vào thư mục `source/` của dự án và chạy Makefile:
 ```bash
-git clone https://github.com/TienThanhUs/SVGRENDER.git
-cd SVGRENDER
+cd source
+make
 ```
+Sau khi biên dịch thành công, sẽ sinh ra một file thực thi mang tên `svg_reader`.
 
-#### Install dependencies *(if applicable)*
-
+### 3.3. Chạy chương trình
+Để chạy chương trình, bạn gõ lệnh:
 ```bash
-npm install
+make run
+# hoặc chạy trực tiếp bằng lệnh: ./svg_reader
+```
+Khi này, Terminal sẽ yêu cầu bạn nhập tên hoặc đường dẫn tới file SVG:
+```text
+Nhap ten file can render (svg-xx.svg): <Nhập đường dẫn file SVG của bạn và ấn Enter>
 ```
 
----
-
-## 💡 Usage
-
-```js
-import { SVGRenderer } from './src/SVGRenderer';
-
-const renderer = new SVGRenderer();
-const svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
-  <circle cx="50" cy="50" r="40" fill="royalblue" />
-</svg>`;
-
-renderer.render(svgContent, document.getElementById('canvas'));
-```
-
-More examples can be found in the [`examples/`](examples/) directory.
+### 3.4. Dùng bàn phím để điều khiển (Keyboard Controls)
+Khi cửa sổ SFML hiện ra, bạn có thể điều hướng góc nhìn bằng các phím sau:
+- `R`: Trở về trạng thái ban đầu (Reset view với zoom = 1.0, không xoay).
+- `=` (Phím Bằng): Phóng to lên 1.5 lần (Zoom IN).
+- `-` (Phím Trừ): Thu nhỏ đi 1.5 lần (Zoom OUT).
+- `->` (Mũi tên Phải): Xoay góc nhìn sang phải 15 độ.
+- `<-` (Mũi tên Trái): Xoay góc nhìn sang trái 15 độ.
 
 ---
-
-## 📖 API Reference
-
-| Method | Parameters | Description |
-|--------|-----------|-------------|
-| `render(svg, target)` | `svg: string`, `target: HTMLElement` | Parses and renders an SVG string into the target element |
-| `parse(svg)` | `svg: string` | Parses an SVG string and returns an AST |
-| `export(format)` | `format: 'png' \| 'jpg' \| 'svg'` | Exports the current canvas to the specified format |
-
-> **Note:** Full API documentation will be available soon.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome and greatly appreciated!
-
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feat/amazing-feature`
-3. **Commit** your changes: `git commit -m "feat: add amazing feature"`
-4. **Push** to the branch: `git push origin feat/amazing-feature`
-5. **Open** a Pull Request
-
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) *(coming soon)* for details on the code of conduct and the contribution process.
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👤 Author
-
-**Nguyen Tien Thanh**
-
-- GitHub: [@TienThanhUs](https://github.com/TienThanhUs)
-
----
-
-<div align="center">
-  Made with ❤️ by <a href="https://github.com/TienThanhUs">Nguyen Tien Thanh</a>
-</div>
+*Dự án sử dụng `rapidxml` để parse XML, `earcut` để xử lý mảng lưới đa giác và `SFML` để dựng hình 2D.*
